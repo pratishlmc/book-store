@@ -1,32 +1,31 @@
 import Link from "next/link";
 import User from "./User";
 import {AiOutlineSearch} from "react-icons/ai";
-import {Box, Button, Heading, useColorMode} from "@chakra-ui/react";
+import {Badge, Box, Button, Flex, Heading, useColorMode} from "@chakra-ui/react";
 import Search from "./Search";
 import {useRouter} from "next/router";
+import {FiMoon, FiSun} from "react-icons/fi";
 
 export default function Nav() {
     const route = useRouter()
     const { colorMode, toggleColorMode } = useColorMode()
 
     return (
-    <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} pt={5} pb={5}>
+    <Flex alignItems={'center'} justifyContent={'space-between'} pt={5} pb={5}>
       <Link href="/">
-          <Heading fontSize={20}>
-              BookLinkr.
-          </Heading>
+          <Flex>
+              <Heading fontSize={20}>
+                  BookLinkr.
+              </Heading>
+              <Badge ml={1} h={'fit-content'} colorScheme={"blue"}>BETA</Badge>
+          </Flex>
       </Link>
-        <Box display={'flex'} alignItems={'center'} gap={5}>
+        <Flex alignItems={'center'} gap={5}>
             <Button onClick={toggleColorMode}>
-                Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+                {colorMode === 'light' ? <FiMoon/> : <FiSun/>}
             </Button>
-            {
-                route.pathname === "/" &&
-                    <Search/>
-            }
             <User />
-        </Box>
-
-    </Box>
+        </Flex>
+    </Flex>
   );
 }

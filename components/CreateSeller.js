@@ -5,7 +5,7 @@ import {useUser} from "@auth0/nextjs-auth0";
 import {useRouter} from "next/router";
 import {Box, Button, Heading, Input, InputGroup, InputLeftAddon, Select} from "@chakra-ui/react";
 import {AiOutlineSwap} from "react-icons/ai";
-export default function CreateSeller({data, activeProfile}) {
+export default function CreateSeller({data, isUser}) {
     const [phone, setPhone] = useState("")
     const [country, setCountry] = useState("")
     const [city, setCity] = useState("")
@@ -83,7 +83,7 @@ export default function CreateSeller({data, activeProfile}) {
 
     }
 
-if(activeProfile === user && !data?.attributes){
+if(isUser && !data?.attributes){
     return (
             <Box my={5}>
                 <Heading>Start Selling?</Heading>

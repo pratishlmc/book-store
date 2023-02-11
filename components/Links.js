@@ -24,11 +24,12 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 
-const Links = ({data, activeProfile}) => {
+const Links = ({data, isUser}) => {
     const [platform, setPlatform] = useState('')
     const [url, setUrl] = useState('')
-    const [changed, setChanged] =useState(false)
+    const [changed, setChanged] = useState(false)
     const [links, setLinks] = useState(data?.attributes.table)
+
     const { user } = useUser();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const initialRef = React.useRef(null)
@@ -144,7 +145,7 @@ const Links = ({data, activeProfile}) => {
                 <Heading display={'flex'} alignItems={'center'} gap={2}>
                     Contact <AiOutlineContacts/>
                 </Heading>
-                {activeProfile === user && RequestButton()}
+                {isUser && RequestButton()}
             </Box>
 
             <SimpleGrid mt={5} columns={[1, 2, 3, 4]} gap={2}>
@@ -170,11 +171,12 @@ const Links = ({data, activeProfile}) => {
                             <Link href={d.url} target={"_blank"}>
                                 <Box display={"flex"} alignItems={'center'} justifyContent={'space-between'} gap={2}>
                                     <Text>{d.platform}</Text>
-                                    <Image src={`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${d.url}&size=16`} alt={d.platform}/>
+                                    <Image
+                                        src={`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${d.url}&size=16` || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Chain_link_icon_slanted.png/800px-Chain_link_icon_slanted.png"} alt={d.platform}/>
                                 </Box>
                             </Link>
                         </Box>
-                            {activeProfile === user &&
+                            {isUser &&
                                 <Box ml={2}>
                                     <Menu>
                                         <MenuButton borderRadius={5} p={1.5} backgroundColor={"#dadada"}>
@@ -197,14 +199,14 @@ const Links = ({data, activeProfile}) => {
             )}
             </SimpleGrid>
             {
-                activeProfile === user && links?.length >= 5 &&
+                isUser && links?.length >= 5 &&
                 <Box display={'flex'} alignItems={'center'} gap={1} my={3}>
                     <AiOutlineInfoCircle size={20} />
-                    <Text color={"gray.600"}><b>Max quantity of Links is 5.</b></Text>
+                    <Text color={"gray.600"}><b>Max quantity of Links reached.</b></Text>
                 </Box>
             }
             {
-                activeProfile === user && links?.length < 5 &&
+                isUser && links?.length < 5 &&
                 <Button
                     onClick={onOpen}
                     mt={4}

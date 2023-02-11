@@ -2,8 +2,9 @@ import { GET_BOOK_QUERY } from "../../lib/query";
 import { useQuery } from "urql";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import {SimpleGrid, Heading, Image, Text, Box, Container, Button, Divider} from "@chakra-ui/react";
+import {SimpleGrid, Heading, Image, Text, Box, Container, Button, Divider, Flex} from "@chakra-ui/react";
 import {AiOutlineArrowRight} from "react-icons/ai";
+import Loading from "../../components/Loading";
 export default function BookDetails() {
 
   //Fetch slug
@@ -15,7 +16,7 @@ export default function BookDetails() {
     variables: { slug: query.slug },
   });
   const { data, fetching, error } = results;
-  if (fetching) return <p>Loading...</p>;
+  if (fetching) return <Loading/>;
   if (error) return <p>Oh no... {error.message}</p>;
   //Extract Data
   const { title, image, original_price, price, seller, genre } = data.books.data[0].attributes;
@@ -52,10 +53,11 @@ export default function BookDetails() {
                     border={'2px solid black'}
                     _hover={{ backgroundColor: 'white',
                       color: "gray.900" }}
+                    justifyContent={'space-between'}
                     onClick={() => route.push(`/user/${uid}`)}
                 >
-                  Contact Seller
-                  <AiOutlineArrowRight style={{marginLeft: 3}}/>
+                    <Text>Contact Seller</Text>
+                    <AiOutlineArrowRight style={{marginLeft: 3}}/>
                 </Button>
               </Box>
             </SimpleGrid>
