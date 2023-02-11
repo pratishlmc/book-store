@@ -1,14 +1,32 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import {useUser} from "@auth0/nextjs-auth0";
 import {useRouter} from "next/router";
-
+import {Box, Button, Heading, Input, InputGroup, InputLeftAddon, Select} from "@chakra-ui/react";
+import {AiOutlineSwap} from "react-icons/ai";
 export default function CreateSeller({data, activeProfile}) {
     const [phone, setPhone] = useState("")
-    const [country, setCountry] = useState("977")
+    const [country, setCountry] = useState("")
+    const [city, setCity] = useState("")
+    const [countriesInfo, setSountriesInfo] = useState()
+    const dialCode = countriesInfo?.filter((fi)=> fi.name === country).map((d)=> d.dial_code)
     const route = useRouter();
-    const {user, isLoading} = useUser();
+    const {user} = useUser();
+
+    const getCountriesInfo = async () => {
+        await fetch('https://pratishlmc.github.io/useful-json-data/countriesInfo.json')
+            .then(response => {
+                return response.json();
+            }).then(data => {
+                setSountriesInfo(data);
+            }).catch((e) => {
+                console.log(e.message);
+            });
+    }
+    useEffect(() => {
+        getCountriesInfo()
+    },[])
 
     const notify = () => {
         toast.loading(
@@ -30,7 +48,10 @@ export default function CreateSeller({data, activeProfile}) {
                 "name": user.name,
                 "email": user.email,
                 "picture": user.picture,
-                "phone": `+${country}-${phone}`
+                "phone": `${dialCode} ${phone}`,
+                "country": country,
+                "address": city
+
             }
         }
 
@@ -50,7 +71,7 @@ export default function CreateSeller({data, activeProfile}) {
                 toast.error("Couldn't submit request.")
                 setTimeout(function (){
                     toast(
-                        "Please check your phone number and try again.\n A seller with the same email or phone number already exists.",
+                        "1. Please check your phone number and try again.\n\n 2. A seller with the same email or phone number already exists.",
                         {
                             duration: 6000,
                         }
@@ -64,69 +85,66 @@ export default function CreateSeller({data, activeProfile}) {
 
 if(activeProfile === user && !data?.attributes){
     return (
-        <>
-            <div style={{
-                marginTop: 40,
-                marginBottom: 20
-            }}>
-                <p style={{
-                    fontSize: 28,
-                    fontWeight: "bold"
-                }}>Start Selling?</p>
+            <Box my={5}>
+                <Heading>Start Selling?</Heading>
                 <form onSubmit={handleCreate}>
-                    <div style={{
-                        display: "flex",
-                        gap: 5,
-                        marginTop: 3,
-                    }}>
-                        <select
+                    <Box mt={3} display={'flex'} flexDir={'column'} gap={1.5}>
+                        <Select
+                            w={'full'}
                             value={country}
                             onChange={(e)=> setCountry(e.target.value)}
-                            style={{
-                                height: 48,
-                                width: "fit-content",
-                                borderWidth: 2,
-                                borderRadius: 5,
-
-                            }}
                         >
-                            <option defaultValue value="977">Nepal (+977)</option>
-                            <option value="91">India (+91)</option>
-                            <option value="1">USA (+1)</option>
-                            <option value="33">France (+33)</option>
-                            <option value="81">Japan (+81)</option>
-                            <option value="86">China (+86)</option>
-                            <option value="44">UK (+44)</option>
-                        </select>
-                        <input type={'number'} placeholder={'Phone number'} minLength={10} maxLength={10} style={{
-                            height: 48,
-                            width: "100%",
-                            borderWidth: 2,
-                            borderRadius: 5,
-                            padding: 10,
-                            fontSize: 16
-                        }}
-                               value={phone}
-                               onChange={(e)=> setPhone(e.target.value)}
-                        ></input>
-                    </div>
-                    <AddButton style={{ height: '48px' }} type={'submit'}>Switch to selling account</AddButton>
+                            <option hidden={true}>-- Select your country --</option>
+                            {
+                                countriesInfo?.map((info)=>
+                                    (
+                                        <>
+                                            <option value={info.name}>
+                                                {info.name}
+                                            </option>
+                                        </>
+                                    ))
+                            }
+                        </Select>
+                        <Input
+                            w={'full'}
+                            type={'text'}
+                            max={30}
+                            placeholder={'City'}
+                            value={city}
+                            onChange={(e)=> setCity(e.target.value)}
+                        ></Input>
+                        <InputGroup>
+                            {
+                                dialCode > 0 && <InputLeftAddon children={dialCode} />
+                            }
+                            <Input
+                                w={'full'}
+                                type={'number'}
+                                placeholder={'Phone number'}
+                                value={phone}
+                                onChange={(e)=> setPhone(e.target.value)}
+                            ></Input>
+                        </InputGroup>
+
+                        <Button
+                            mt={2}
+                            border={"1px solid black"}
+                            width={'full'}
+                            backgroundColor={"black"}
+                            color={"white"}
+                            _hover={{ backgroundColor: "white", color: "gray.900" }}
+                            h={"48px"}
+                            fontWeight={"normal"}
+                            type={'submit'}>
+                            Switch to selling account
+                            <Box padding={1}></Box>
+                            <AiOutlineSwap/>
+                        </Button>
+                    </Box>
                 </form>
-            </div>
-        </>
+            </Box>
     );
 }
 
 }
-
-
-const AddButton = styled.button`
-  margin-top: 10px;
-  padding: 10px 20px;
-  width: 100%;
-  background-color: #000000;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-`;

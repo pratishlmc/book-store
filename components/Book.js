@@ -1,20 +1,32 @@
-import { BookStyles } from "../styles/BookStyle";
 import Link from "next/link";
+import {Box, Card, color, Divider, Heading, Image, Skeleton, Text} from "@chakra-ui/react";
 
-export default function Book({ book }) {
-  //Extract from props
-  const { title, price, image, slug } = book.attributes;
+export default function Book({ book, primary }) {
+    console.log(primary)
+    //Extract from props
+    const { title, price, image, slug, genre } = book.attributes;
+    return (
+            <Link href={`/book/${slug}`}>
+                <Card boxShadow={'sm'}
+                      h={'fit-content'}
+                      bgColor={"brand.primary"}
+                      borderRadius={5}
+                      padding={4}>
+                    <Image borderRadius={2.5} src={image.data.attributes.url || "/house-blue.webp"} alt={title}/>
 
-
-  return (
-    <BookStyles>
-      <Link href={`/book/${slug}`}>
-        <div >
-           <img src={image.data.attributes.url} alt={title}/>
-        </div>
-      </Link>
-      <h2>{title} </h2>
-      <h3>NPR {price}</h3>
-    </BookStyles>
-  );
+                    <Box mt={2}>
+                        <Text noOfLines={[1, 2, 2, 1]}
+                              fontSize={18}>
+                            <b>{title}</b>
+                        </Text>
+                        <Text>{genre}</Text>
+                        <Text fontSize={14}>NPR
+                            <Text ml={1} display={'inline'} color={'green.600'}>
+                                {price}
+                            </Text>
+                        </Text>
+                    </Box>
+                </Card>
+            </Link>
+);
 }
