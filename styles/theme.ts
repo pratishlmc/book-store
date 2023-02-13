@@ -9,6 +9,9 @@ const config: ThemeConfig = {
 }
 
 const colors = {
+    gray: {
+        700: "#0d1117",
+    },
     light: {
         bg: "#fff",
         100: "#fafafa",
@@ -17,7 +20,7 @@ const colors = {
         400: "#888"
     },
     dark: {
-        bg: "#000",
+        bg: "#0d1117",
         100: "#111",
         200: "#333",
         300: "#444",
@@ -39,6 +42,14 @@ const fonts = {
         title: 'Merriweather, sans-serif'
 }
 
-const theme = extendTheme({ styles, config, colors, fonts })
+const components = {
+    list: {
+        defaultProps: {
+            backgroundColor: mode("#fff", "#0d1117")
+        }
+    }
+}
+
+const theme = extendTheme({  colors, styles, components, config, fonts })
 
 export default theme

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {useUser} from "@auth0/nextjs-auth0";
 import {
     AiOutlineMore,
@@ -24,19 +24,22 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 
-const Links = ({data, isUser}) => {
+interface Props {
+    isUser: boolean,
+    data: SellerData
+}
+
+const Links = ({data, isUser}: Props) => {
     const [platform, setPlatform] = useState('')
     const [url, setUrl] = useState('')
     const [changed, setChanged] = useState(false)
-    const [links, setLinks] = useState(data?.attributes.table)
-
-    const { user } = useUser();
+    const [links, setLinks] = useState<TableData[]>([data?.attributes.table])
+    // const { user } = useUser();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const initialRef = React.useRef(null)
     const route = useRouter();
 
-    const handleAdd = (e) => {
-        e.preventDefault();
+    const handleAdd = () => {
         if(platform && url !== "") {
             const uuid = (Math.random() + 1).toString(36).substring(2);
             const newLink = {id: uuid, platform: platform, url: url}
@@ -50,7 +53,7 @@ const Links = ({data, isUser}) => {
         }
     }
 
-    const handleDelete = (id) => {
+    const handleDelete = (id: string) => {
         for(let i = 0; i < links.length; i++) {
             if(links[i].id === id) {
                 links.splice(i, 1);
@@ -95,7 +98,7 @@ const Links = ({data, isUser}) => {
                 } else {
                     toast.error("Couldn't submit request.")
                     setTimeout(function () {
-                        toast((t) => (
+                        toast(() => (
                             <span>
                             Please <b>Refresh</b> the page and try again
                             <button style={{
@@ -149,7 +152,7 @@ const Links = ({data, isUser}) => {
             </Box>
 
             <SimpleGrid mt={5} columns={[1, 2, 3, 4]} gap={2}>
-            {links?.map((d)=>
+            {links?.map((d: TableData)=>
                 (
                     <div key={d.id}>
                         <Button
@@ -228,7 +231,6 @@ const Links = ({data, isUser}) => {
 
             <Box marginX={3}>
                 <Modal
-                    backdropFilter={'blur(10px)'}
                    size={['full', 'sm', 'md', 'lg']}
                     initialFocusRef={initialRef}
                     isOpen={isOpen}

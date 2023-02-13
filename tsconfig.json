@@ -22,7 +22,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "pages/_document.jsx", "pages/_app.jsx", "lib/context.js", "lib/query.js", "pages/book/[slug].jsx", "pages/api/auth/[...auth0].js",
+    "pages/user/[uid]", "pages/index.Tsx", "components/CreateSeller.jsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -3,20 +3,19 @@ import { withPageAuthRequired, getSession, useUser } from "@auth0/nextjs-auth0";
 import Links from "../../components/Links";
 import {useQuery} from "urql";
 import {GET_SELLERS_QUERY} from "../../lib/query";
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import CreateSeller from "../../components/CreateSeller";
 import Image from "next/image";
 import Head from "next/head";
-import {Box, color, Divider, Heading, Text} from "@chakra-ui/react";
+import {Box, Divider, Heading, Text} from "@chakra-ui/react";
 import { ColorExtractor } from 'react-color-extractor'
 import Loading from "../../components/Loading";
 
 export default function Profile() {
     const {user, isLoading} = useUser();
-    const [cover, setCover] = useState()
+    const [cover, setCover] = useState<string[]>([])
 
     const {query} = useRouter();
-    // const route = useRouter();
 
     const [results] = useQuery({
         query: GET_SELLERS_QUERY,
@@ -24,7 +23,7 @@ export default function Profile() {
     });
     const {data, fetching, error } = results;
     const res = data?.sellers.data[0];
-    const activeProfile = res?.attributes
+    const activeProfile: SellerAttributes = res?.attributes
 
     console.log(cover)
 
@@ -91,8 +90,8 @@ export default function Profile() {
 
             </Box>
                 <Divider mt={2} mb={2} h={2} color={'black'}/>
-                <CreateSeller isUser={activeProfile.uid === user.sub} data={res}/>
-                <Links isUser={activeProfile.uid === user.sub} data={res}/>
+                <CreateSeller isUser={activeProfile.uid === user?.sub} data={res}/>
+                <Links isUser={activeProfile.uid === user?.sub} data={res}/>
             </>
 
         )
