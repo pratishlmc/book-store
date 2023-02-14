@@ -1,5 +1,4 @@
 import React, { useState} from 'react';
-import {useUser} from "@auth0/nextjs-auth0";
 import {
     AiOutlineMore,
     AiOutlineContacts,
@@ -22,7 +21,8 @@ import {
     ModalFooter, ModalHeader, ModalOverlay,
     Text, useDisclosure, SimpleGrid, Image, Menu, MenuButton, MenuList, MenuItem
 } from "@chakra-ui/react";
-import Link from "next/link";
+import Link from "next/link"
+
 
 interface Props {
     isUser: boolean,
@@ -33,17 +33,18 @@ const Links = ({data, isUser}: Props) => {
     const [platform, setPlatform] = useState('')
     const [url, setUrl] = useState('')
     const [changed, setChanged] = useState(false)
-    const [links, setLinks] = useState<TableData[]>([data?.attributes.table])
+    const [links, setLinks] = useState<TableData[]>(data?.attributes.table)
     // const { user } = useUser();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const initialRef = React.useRef(null)
     const route = useRouter();
 
-    const handleAdd = () => {
+    const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         if(platform && url !== "") {
             const uuid = (Math.random() + 1).toString(36).substring(2);
             const newLink = {id: uuid, platform: platform, url: url}
-            setLinks(prevState => [...prevState, newLink])
+            setLinks((prevState) => [...prevState, newLink])
             setPlatform('');
             setUrl('');
             setChanged(true);
@@ -91,7 +92,6 @@ const Links = ({data, isUser}: Props) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(json_obj),
-
             }).then((res) => {
                 if (res.ok) {
                     notify();
@@ -141,7 +141,6 @@ const Links = ({data, isUser}: Props) => {
         }
     }
 
-    if(data?.attributes){
         return (
         <>
             <Box  mt={4} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
@@ -171,13 +170,14 @@ const Links = ({data, isUser}: Props) => {
                             type={'submit'}>
 
                         <Box w={'full'}>
-                            <Link href={d.url} target={"_blank"}>
+                            <Link href={`${d.url}`} target={"_blank"}>
                                 <Box display={"flex"} alignItems={'center'} justifyContent={'space-between'} gap={2}>
                                     <Text>{d.platform}</Text>
                                     <Image
                                         src={`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${d.url}&size=16` || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Chain_link_icon_slanted.png/800px-Chain_link_icon_slanted.png"} alt={d.platform}/>
                                 </Box>
                             </Link>
+
                         </Box>
                             {isUser &&
                                 <Box ml={2}>
@@ -269,11 +269,8 @@ const Links = ({data, isUser}: Props) => {
                     </ModalContent>
                 </Modal>
             </Box>
-
-
-            </>
+        </>
              );
-    }
 };
 
 export default Links;

@@ -1,3 +1,4 @@
+declare module 'react-color-extractor';
 interface AllBooks {
 	books: Book[];
 }
@@ -44,8 +45,8 @@ interface SellerAttributes {
 	uid: string;
 	name: string;
 	email: string;
-	picture: string | null;
-	table: TableData;
+	picture: string;
+	table: TableData[];
 	phone: string;
 	country: string;
 	address: string;

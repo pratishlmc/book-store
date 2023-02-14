@@ -24,8 +24,7 @@ export default function Profile() {
     const {data, fetching, error } = results;
     const res = data?.sellers.data[0];
     const activeProfile: SellerAttributes = res?.attributes
-
-    console.log(cover)
+    const isUser = activeProfile?.uid === user?.sub
 
     if (fetching || isLoading ) return (
         <>
@@ -50,7 +49,7 @@ export default function Profile() {
                 <Box>
                 <ColorExtractor
                     src={activeProfile.picture}
-                    getColors={colors => setCover([colors[0], colors[1]])
+                    getColors={(colors: string[]) => setCover([colors[0], colors[1]])
                     }/>
                 <Box h={'200px'}>
                     <Box shadow={'lg'} borderRadius={10} w={'full'} h={'75%'}
@@ -90,8 +89,13 @@ export default function Profile() {
 
             </Box>
                 <Divider mt={2} mb={2} h={2} color={'black'}/>
-                <CreateSeller isUser={activeProfile.uid === user?.sub} data={res}/>
-                <Links isUser={activeProfile.uid === user?.sub} data={res}/>
+
+                {
+                    isUser && !res?.attributes ?
+                        <CreateSeller data={res}/>
+                        :
+                        <Links isUser={isUser} data={res}/>
+                }
             </>
 
         )

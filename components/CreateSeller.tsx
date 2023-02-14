@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useUser } from "@auth0/nextjs-auth0";
+import {UserProfile, useUser} from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
 import {
 	Box,
@@ -13,14 +13,24 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineSwap } from "react-icons/ai";
 
-export default function CreateSeller({ data, isUser }) {
+interface Props {
+	data: SellerData,
+}
+
+interface CountriesData {
+	name: string,
+	dial_code: string
+}
+
+function CreateSeller({ data }: Props) {
 	const [phone, setPhone] = useState("");
 	const [country, setCountry] = useState("");
 	const [city, setCity] = useState("");
-	const [countriesInfo, setSountriesInfo] = useState();
+	const [countriesInfo, setCountriesInfo] = useState<CountriesData[]>([]);
 	const dialCode = countriesInfo
-		?.filter((fi) => fi.name === country)
+		?.filter((fi ) => fi.name === country)
 		.map((d) => d.dial_code);
+
 	const route = useRouter();
 	const { user } = useUser();
 
@@ -32,7 +42,7 @@ export default function CreateSeller({ data, isUser }) {
 				return response.json();
 			})
 			.then((data) => {
-				setSountriesInfo(data);
+				setCountriesInfo(data);
 			})
 			.catch((e) => {
 				console.log(e.message);
@@ -50,15 +60,14 @@ export default function CreateSeller({ data, isUser }) {
 			toast.success("Successfully Published!");
 		}, 500);
 	};
-	const handleCreate = async (e) => {
-		e.preventDefault();
+	const handleCreate = async () => {
 		const json_obj = {
 			data: {
 				table: [],
-				uid: user.sub,
-				name: user.name,
-				email: user.email,
-				picture: user.picture,
+				uid: user?.sub,
+				name: user?.name,
+				email: user?.email,
+				picture: user?.picture,
 				phone: `${dialCode} ${phone}`,
 				country: country,
 				address: city,
@@ -91,7 +100,6 @@ export default function CreateSeller({ data, isUser }) {
 		});
 	};
 
-	if (isUser && !data?.attributes) {
 		return (
 			<Box my={5}>
 				<Heading>Start Selling?</Heading>
@@ -118,7 +126,7 @@ export default function CreateSeller({ data, isUser }) {
 							onChange={(e) => setCity(e.target.value)}
 						></Input>
 						<InputGroup>
-							{dialCode > 0 && <InputLeftAddon children={dialCode} />}
+							{dialCode && <InputLeftAddon children={dialCode} />}
 							<Input
 								w={"full"}
 								type={"number"}
@@ -147,5 +155,6 @@ export default function CreateSeller({ data, isUser }) {
 				</form>
 			</Box>
 		);
-	}
 }
+
+export default CreateSeller;

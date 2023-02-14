@@ -33,7 +33,11 @@ export default function User() {
             <Menu placement={"bottom-end"}>
                 <MenuButton>
                     <Box backgroundColor={backgroundColor} borderRadius={10} paddingY={1.5} paddingX={3} display={'flex'} alignItems={'center'} gap={1.5}>
-                        <Image style={{ borderRadius: '50%' }} src={user.picture} width={30} height={30} alt={user.name} />
+                        <Image style={{borderRadius: '50%'}}
+                               src={user.picture!}
+                               width={30}
+                               height={30}
+                               alt={user.name!}/>
                         <AiOutlineCaretDown/>
                     </Box>
                 </MenuButton>

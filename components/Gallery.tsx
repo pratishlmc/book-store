@@ -17,8 +17,7 @@ export default function Gallery({books}: Props) {
 
     return <Box>
         <SimpleGrid
-            paddingX={[8, 10, 16, 28]}
-            marginY={[5, 30]}
+            marginY={[5, 10]}
             columns={[1, 2, 3, null, 4]}
             spacing="40px"
         >

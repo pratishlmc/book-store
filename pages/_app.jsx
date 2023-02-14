@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import {StateContext} from "../lib/context";
 import theme from "../styles/theme";
 import {Chakra} from "../styles/Chakra";
+import {Box} from "@chakra-ui/react";
 
 const client = createClient({ url: process.env.NEXT_PUBLIC_BACKEND_API });
 function MyApp({ Component, pageProps }) {
@@ -16,7 +17,9 @@ function MyApp({ Component, pageProps }) {
                     <Provider value={client}>
                         <Nav />
                         <Toaster />
-                        <Component {...pageProps} />
+                        <Box paddingX={[8, 10, 16, 28]}>
+                            <Component {...pageProps} />
+                        </Box>
                     </Provider>
                 </StateContext>
             </UserProvider>
