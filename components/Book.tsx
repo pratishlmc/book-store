@@ -7,7 +7,7 @@ type Props = {
 
 export default function Book({ book }: Props) {
 	const backgroundColor = useColorModeValue("light.200", "dark.200");
-	const { title, price, image, slug, genre } = book;
+	const { title, price, image, slug, genre, original_price } = book;
 
 	return (
 		<Link href={`/book/${slug}`}>
@@ -31,7 +31,10 @@ export default function Book({ book }: Props) {
 					<Text>{genre}</Text>
 					<Text fontSize={14}>
 						NPR
-						<Text ml={1} display={"inline"} color={"green.600"}>
+						<Text ml={1} textDecoration={"line-through"} display={"inline"} color={"red.400"}>
+							{original_price}
+						</Text>
+						<Text ml={1} display={"inline"} color={"green.400"}>
 							{price}
 						</Text>
 					</Text>

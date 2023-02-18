@@ -1,11 +1,11 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     AiOutlineMore,
     AiOutlineContacts,
     AiOutlineInfoCircle,
     AiOutlinePlus,
     AiOutlineDelete,
-    AiOutlineCheck
+    AiOutlineCheck, AiOutlineSave
 } from "react-icons/ai";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
@@ -19,7 +19,7 @@ import {
     ModalBody,
     ModalCloseButton, ModalContent,
     ModalFooter, ModalHeader, ModalOverlay,
-    Text, useDisclosure, SimpleGrid, Image, Menu, MenuButton, MenuList, MenuItem
+    Text, useDisclosure, SimpleGrid, Image, Menu, MenuButton, MenuList, MenuItem, useColorModeValue
 } from "@chakra-ui/react";
 import Link from "next/link"
 
@@ -30,14 +30,21 @@ interface Props {
 }
 
 const Links = ({data, isUser}: Props) => {
+    const linkBg = useColorModeValue("light.200", "dark.200")
+    const textColor = useColorModeValue("dark.100", "light.100")
+    const actionBtnColor = useColorModeValue("light.300", "dark.300")
+
     const [platform, setPlatform] = useState('')
     const [url, setUrl] = useState('')
     const [changed, setChanged] = useState(false)
     const [links, setLinks] = useState<TableData[]>(data?.attributes.table)
-    // const { user } = useUser();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const initialRef = React.useRef(null)
     const route = useRouter();
+
+    useEffect(()=> {
+        setLinks(data?.attributes.table)
+    })
 
     const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -120,25 +127,35 @@ const Links = ({data, isUser}: Props) => {
 
     const RequestButton = () => {
         if(changed){
-            return <Button colorScheme='linkedin' onClick={handleSubmit} >
-                <Text display={'flex'} alignItems={'center'}>
-                    <AiOutlineCheck
-                        size={16}
-                        color={'white'}
-                        style={{marginRight: 5}}/> Save
+            return <Button
+                display={'flex'} alignItems={'center'}
+                fontWeight={"normal"} colorScheme='linkedin' onClick={handleSubmit} >
+                <Text >
+                    Save
                 </Text>
+                <AiOutlineCheck
+                    size={16}
+                    style={{marginLeft: 5}}/>
 
             </Button>
         }else {
-            return <Button colorScheme='gray' onClick={()=> toast.error("No changes made.")}>
-                <Text display={'flex'} alignItems={'center'}>
-                    <AiOutlineCheck
+            return <Button
+                display={'flex'} alignItems={'center'}
+                        fontWeight={"normal"}
+                           colorScheme='gray'
+                           onClick={()=> toast.error("No changes made.")}>
+                <Text >
+                    Save
+                </Text>
+                <Text>
+                    <AiOutlineSave
                         size={16}
-                        color={'black'}
-                        style={{marginRight: 5}}/> Save
+                        // color={"gray.500"}
+                        style={{marginLeft: 5}}/>
                 </Text>
             </Button>
         }
+
     }
 
         return (
@@ -159,12 +176,11 @@ const Links = ({data, isUser}: Props) => {
                             justifyContent={'space-between'}
                             alignItems={'center'}
                             width={'full'}
-                            backgroundColor={"brand.600"}
-                            color={"black"}
+                            backgroundColor={linkBg}
+                            color={textColor}
                             shadow={'sm'}
-                            border={"2px solid #eaeaea"}
+                            border={`2px solid ${linkBg}`}
                             transition={'250ms ease-in-out'}
-                            _hover={{ border: "2px solid black", color: "gray.900" }}
                             h={"48px"}
                             fontWeight={"normal"}
                             type={'submit'}>
@@ -174,7 +190,8 @@ const Links = ({data, isUser}: Props) => {
                                 <Box display={"flex"} alignItems={'center'} justifyContent={'space-between'} gap={2}>
                                     <Text>{d.platform}</Text>
                                     <Image
-                                        src={`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${d.url}&size=16` || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Chain_link_icon_slanted.png/800px-Chain_link_icon_slanted.png"} alt={d.platform}/>
+                                        src={`https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${d.url}&size=16`}
+                                        alt={d.platform}/>
                                 </Box>
                             </Link>
 
@@ -182,24 +199,38 @@ const Links = ({data, isUser}: Props) => {
                             {isUser &&
                                 <Box ml={2}>
                                     <Menu>
-                                        <MenuButton borderRadius={5} p={1.5} backgroundColor={"#dadada"}>
+                                        <MenuButton bgColor={actionBtnColor} borderRadius={5} p={1.5}>
                                             <AiOutlineMore size={18}/>
                                         </MenuButton>
                                         <MenuList padding={0}>
                                             <MenuItem onClick={()=> handleDelete(d.id)} padding={3} justifyContent={'space-between'}>
-                                                <Text>Remove</Text>
+                                                <Text fontWeight={"normal"}>Remove</Text>
                                                 <AiOutlineDelete color={'red'}/>
                                             </MenuItem>
                                         </MenuList>
                                     </Menu>
                                 </Box>
                             }
-
                         </Button>
                     </div>
 
                 )
             )}
+                {
+                    isUser && links?.length < 5 &&
+                    <Button
+                        onClick={onOpen}
+                        variant={"brand"}
+                        width={'full'}
+                        h={"48px"}
+                        type={'submit'}
+                        display={'flex'}
+                        gap={2}
+                    >
+                        <Text>Add Link</Text>
+                        <AiOutlinePlus/>
+                    </Button>
+                }
             </SimpleGrid>
             {
                 isUser && links?.length >= 5 &&
@@ -207,26 +238,6 @@ const Links = ({data, isUser}: Props) => {
                     <AiOutlineInfoCircle size={20} />
                     <Text color={"gray.600"}><b>Max quantity of Links reached.</b></Text>
                 </Box>
-            }
-            {
-                isUser && links?.length < 5 &&
-                <Button
-                    onClick={onOpen}
-                    mt={4}
-                    border={"1px solid black"}
-                    width={'full'}
-                    backgroundColor={"black"}
-                    color={"white"}
-                    _hover={{ backgroundColor: "white", color: "gray.900" }}
-                    h={"48px"}
-                    fontWeight={"normal"}
-                    type={'submit'}
-                display={'flex'}
-                    justifyContent={'space-between'}
-                >
-                    Add Link
-                    <AiOutlinePlus/>
-                </Button>
             }
 
             <Box marginX={3}>
@@ -252,18 +263,16 @@ const Links = ({data, isUser}: Props) => {
                                     </FormLabel>
                                     <Input value={platform} onChange={(e)=> setPlatform(e.target.value)} ref={initialRef} placeholder='Title' />
                                 </FormControl>
-
                                 <FormControl mt={4}>
                                     <Text>URL</Text>
                                     <Input type={'url'} value={url} onChange={(e)=> setUrl(e.target.value)} placeholder='https://www.example.com/' />
                                 </FormControl>
                             </ModalBody>
-
                             <ModalFooter>
-                                <Button mr={3} type={'submit'}>
+                                <Button variant={"brand"} mr={3} type={'submit'}>
                                     Add
                                 </Button>
-                                <Button onClick={onClose}>Cancel</Button>
+                                <Button colorScheme={"red"} onClick={onClose}>Cancel</Button>
                             </ModalFooter>
                         </form>
                     </ModalContent>

@@ -13,9 +13,14 @@ interface BookData {
 
 interface BookAttributes {
 	title: string;
+	grade: string,
+	condition: number,
+	currency: string,
+	publication: string,
+	author: string,
 	price: number;
 	original_price: number;
-	seller: Seller[];
+	seller: Seller;
 	image: Image;
 	slug: string;
 	genre: string;
@@ -51,7 +56,6 @@ interface SellerAttributes {
 	country: string;
 	address: string;
 }
-
 interface TableData {
 	id: string,
 	platform: string,

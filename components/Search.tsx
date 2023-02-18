@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import {AiOutlineSearch} from "react-icons/ai";
 import {Box, Divider, Flex, Input, useColorModeValue} from "@chakra-ui/react";
 import {useStateContext} from "../lib/context";

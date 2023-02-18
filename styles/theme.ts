@@ -2,6 +2,7 @@ import {extendTheme, type ThemeConfig} from '@chakra-ui/react'
 import '@fontsource/raleway/700.css'
 import '@fontsource/noto-sans/400.css'
 import {mode} from "@chakra-ui/theme-tools";
+import {ButtonStyles as Button} from "./ButtonTheme";
 
 const config: ThemeConfig = {
     initialColorMode: 'light',
@@ -43,11 +44,7 @@ const fonts = {
 }
 
 const components = {
-    list: {
-        defaultProps: {
-            backgroundColor: mode("#fff", "#0d1117")
-        }
-    }
+    Button,
 }
 
 const theme = extendTheme({  colors, styles, components, config, fonts })

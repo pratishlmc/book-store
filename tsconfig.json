@@ -1,32 +1,39 @@
 {
-  "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-, "pages/_document.jsx", "pages/_app.jsx", "lib/context.js", "lib/query.js", "pages/book/[slug].jsx", "pages/api/auth/[...auth0].js",
-    "pages/user/[uid]", "pages/index.Tsx",
-    "components/CreateSeller"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+	"compilerOptions": {
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"incremental": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"pages/_document",
+		"pages/_app",
+		"lib/context.js",
+		"lib/query.js",
+		"pages/book/[slug]",
+		"pages/api/auth/[...auth0].js",
+		"app/user/[uid]",
+		"pages/index.Tsx",
+		"components/CreateSeller",
+		"components/UploadWidget/UploadWidget.js",
+		".next/types/**/*.ts"
+	],
+	"exclude": ["node_modules"]
 }

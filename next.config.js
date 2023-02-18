@@ -6,10 +6,6 @@ const nextConfig = {
     loader: "default",
     domains: ["res.cloudinary.com", "lh3.googleusercontent.com"],
   },
-  compiler: {
-    // ssr and displayName are configured by default
-    styledComponents: true,
-  },
   async redirects() {
     return [
       {
