@@ -3,7 +3,7 @@ import { Progress, Box, ButtonGroup, Button, Flex } from "@chakra-ui/react";
 import Link from "next/link";
 import { BookInfo } from "../components/forms/BookInfo";
 import { BookImage } from "../components/forms/BookImage";
-import { BookPricing } from "../components/forms/BookPricing";
+import {BookPricing} from "../components/forms/BookPricing";
 import Loading from "../components/Loading";
 
 // interface FormType {

@@ -28,12 +28,17 @@
 		"lib/context.js",
 		"lib/query.js",
 		"pages/book/[slug]",
-		"pages/api/auth/[...auth0].js",
+		"pages/api/auth/[...nextauth].js",
 		"app/user/[uid]",
 		"pages/index.Tsx",
 		"components/CreateSeller",
 		"components/UploadWidget/UploadWidget.js",
 		".next/types/**/*.ts"
 	],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules"],
+	"ts-node": {
+		"compilerOptions": {
+			"module": "CommonJS"
+		}
+	}
 }

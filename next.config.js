@@ -4,7 +4,7 @@ const nextConfig = {
   images: {
     deviceSizes: [320, 420, 768, 1024, 1200],
     loader: "default",
-    domains: ["res.cloudinary.com", "lh3.googleusercontent.com"],
+    domains: ["res.cloudinary.com", "lh3.googleusercontent.com", "upcdn.io"],
   },
   async redirects() {
     return [

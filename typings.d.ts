@@ -1,4 +1,5 @@
 declare module 'react-color-extractor';
+declare module "@prisma/client";
 interface AllBooks {
 	books: Book[];
 }
