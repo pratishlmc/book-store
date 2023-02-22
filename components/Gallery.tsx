@@ -4,28 +4,25 @@ import Book from "./Book";
 import { useStateContext } from "../lib/context";
 
 interface Props {
-	books: BookData[];
+	books: BookTypes[];
 }
 export default function Gallery({ books }: Props) {
 	const { searchQuery } = useStateContext();
+
 	const options = {
 		includeScore: true,
-		keys: ["attributes.title"],
+		keys: ["title"],
 	};
-	const fuse = new Fuse<BookData>(books, options);
+	const fuse = new Fuse<BookTypes>(books, options);
 	const filteredBooks = fuse.search(searchQuery);
 
 	return (
 		<Box>
 			<SimpleGrid marginY={[5, 8]} columns={[1, 2, 3, null, 4]} spacing="40px">
 				{searchQuery === ""
-					? books.map((book: BookData) => (
-							<Book key={book.attributes.slug} book={book.attributes} />
-					  ))
+					? books.map((book: BookTypes) => <Book key={book.id} book={book} />)
 					: filteredBooks.map(({ item }) => {
-							return (
-								<Book key={item.attributes?.slug} book={item.attributes} />
-							);
+							return <Book key={item.id} book={item} />;
 					  })}
 			</SimpleGrid>
 			{filteredBooks.length === 0 && searchQuery !== "" && (

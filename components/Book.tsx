@@ -2,15 +2,15 @@ import Link from "next/link";
 import { Box, Card, Image, Text, useColorModeValue } from "@chakra-ui/react";
 
 type Props = {
-	book: BookAttributes;
+	book: BookTypes;
 };
 
 export default function Book({ book }: Props) {
 	const backgroundColor = useColorModeValue("light.200", "dark.200");
-	const { title, price, image, slug, genre, original_price } = book;
+	const { title, price, image, id, genre, original_price } = book;
 
 	return (
-		<Link href={`/book/${slug}`}>
+		<Link href={`/book/${id}`}>
 			<Card
 				boxShadow={"sm"}
 				h={"fit-content"}
@@ -20,7 +20,7 @@ export default function Book({ book }: Props) {
 			>
 				<Image
 					borderRadius={2.5}
-					src={image.data.attributes.url}
+					src={image}
 					alt={title}
 				/>
 

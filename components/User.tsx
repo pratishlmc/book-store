@@ -1,6 +1,5 @@
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
-import { useUser } from "@auth0/nextjs-auth0";
 import {
 	Box,
 	Menu,
@@ -19,10 +18,17 @@ import {
 } from "react-icons/ai";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 export default function User() {
 	const route = useRouter();
 	const { status } = useSession();
+
+	// const session = getServerSession(authOptions);
+	// console.log(session);
+
+	// console.log(session)
 
 	const backgroundColor = useColorModeValue("light.200", "dark.200");
 

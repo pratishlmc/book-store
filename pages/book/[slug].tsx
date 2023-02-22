@@ -1,5 +1,4 @@
-import { GET_BOOK_QUERY } from "../../lib/query";
-import { useQuery } from "urql";
+import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import {
@@ -14,21 +13,28 @@ import {
 } from "@chakra-ui/react";
 import Loading from "../../components/Loading";
 import { BsArrowRight } from "react-icons/bs";
+import axios from "axios";
+
+const getBook = async () => {
+	const response = await axios.get("/api/books/1");
+	return response.data;
+};
 
 export default function BookDetails() {
-	const { query } = useRouter();
 	const route = useRouter();
-	const [results] = useQuery({
-		query: GET_BOOK_QUERY,
-		variables: { slug: query.slug },
-	});
-	const { data, fetching, error } = results;
-	if (fetching) return <Loading />;
-	if (error) return <p>Oh no... {error.message}</p>;
 
-	const { title, image, original_price, price, seller, genre }: BookAttributes =
-		data.books.data[0].attributes;
-	const { name, uid } = seller.data.attributes;
+	const { data, error, isLoading } = useQuery({
+		queryFn: getBook,
+		queryKey: ["book"],
+	});
+
+	console.log(data);
+	if (error) return error;
+	if (isLoading) return <Loading />;
+
+	const { title, image, original_price, price, seller, genre }: BookTypes =
+		data;
+	const { name, id } = seller;
 
 	return (
 		<>
@@ -45,18 +51,16 @@ export default function BookDetails() {
 				columns={[1, 1, 2, 2]}
 				spacing="50px"
 			>
-				<Image
-					justifySelf={"center"}
-					width={"60%"}
-					src={image.data.attributes.url}
-					alt={title}
-				/>
+				<Image justifySelf={"center"} width={"60%"} src={image} alt={title} />
 				<Box>
 					<Heading>{title}</Heading>
-					<Text mt={2}>Genre: {genre}</Text>
+					<Flex justify={"space-between"} mt={2}>
+						<Text>Genre</Text>
+						<Text>{genre}</Text>
+					</Flex>
 					<Divider mt={1} mb={1} h={1} color={"black"} />
-					<Text>
-						Original Price:{" "}
+					<Flex justify={"space-between"} mt={2}>
+						<Text>Original Price </Text>
 						<span
 							style={{
 								color: "red",
@@ -65,20 +69,30 @@ export default function BookDetails() {
 						>
 							NPR {original_price}
 						</span>
-					</Text>
+					</Flex>
+
 					<Divider mt={1} mb={1} h={1} color={"black"} />
-					<Text>
-						Price: <span>NPR {price}</span>
-					</Text>
+					<Flex justify={"space-between"} mt={2}>
+						<Text>Price</Text>
+						<Text>
+							<span>NPR </span>
+							<strong>{price}</strong>
+						</Text>
+					</Flex>
+
 					<Divider mt={1} mb={1} h={1} color={"black"} />
-					<Text>
-						Sold by <b>{name}</b>
-					</Text>
+					<Flex justify={"space-between"} mt={2}>
+						<Text>Sold by</Text>
+						<Text>
+							<b>{name}</b>
+						</Text>
+					</Flex>
+
 					<Button
 						mt={4}
 						width={"full"}
 						variant={"brand"}
-						onClick={() => route.push(`/user/${uid}`)}
+						onClick={() => route.push(`/user/${id}`)}
 						justifyContent={"space-between"}
 						height={"48px"}
 					>

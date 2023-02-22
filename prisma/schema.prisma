@@ -11,20 +11,15 @@ model Book {
   id       String   @id @default(cuid())
   title    String
   genre String
+  grade String
+  currency  String
+  Location  String
   price     String
   original_price    String
   image    String
   sellerId  String
   seller   User      @relation(fields: [sellerId], references: [id])
 }
-
-// model Link {
-//   id      String   @id @default(cuid())
-//   link  String
-//   url String
-//   sellerId  String
-//   seller   User      @relation(fields: [sellerId], references: [id])
-// }
 
 model Account {
   id                 String  @id @default(cuid())

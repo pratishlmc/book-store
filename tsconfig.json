@@ -28,7 +28,7 @@
 		"lib/context.js",
 		"lib/query.js",
 		"pages/book/[slug]",
-		"pages/api/auth/[...nextauth].js",
+		"pages/api/auth/[...nextauth].ts",
 		"app/user/[uid]",
 		"pages/index.Tsx",
 		"components/CreateSeller",
