@@ -18,7 +18,7 @@ export default function Gallery({ books }: Props) {
 
 	return (
 		<Box>
-			<SimpleGrid marginY={[5, 8]} columns={[1, 2, 3, null, 4]} spacing="40px">
+			<SimpleGrid marginY={5} columns={[1, 2, 3, null, 4]} spacing="40px">
 				{searchQuery === ""
 					? books.map((book: BookTypes) => <Book key={book.id} book={book} />)
 					: filteredBooks.map(({ item }) => {

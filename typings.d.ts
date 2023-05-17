@@ -16,12 +16,18 @@ interface BookTypes {
 	genre: string;
 }
 
+interface UserTypes {
+	email?: string;
+	name?: string;
+	image?: string;
+}
+
 interface SellerTypes {
 	id: string;
 	name: string;
 	email: string;
 	image: string;
-	table: TableData[];
+	links: TableData[];
 	phone: string;
 	country: string;
 	address: string;

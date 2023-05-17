@@ -1,8 +1,5 @@
 import { useRouter } from "next/router";
-import { useUser } from "@auth0/nextjs-auth0";
 import Links from "../../components/Links";
-import { useQuery } from "urql";
-import { GET_SELLERS_QUERY } from "../../lib/query";
 import React, { useState } from "react";
 import CreateSeller from "../../components/CreateSeller";
 import Image from "next/image";
@@ -10,29 +7,27 @@ import Head from "next/head";
 import { Box, Divider, Heading, Text } from "@chakra-ui/react";
 import { ColorExtractor } from "react-color-extractor";
 import Loading from "../../components/Loading";
+import axios from "axios";
 
-export default function Profile() {
-	const { user, isLoading } = useUser();
+const getProfile = async () => {
+	const response = await axios.get("/api/auth/session");
+	return response.data;
+};
+
+export default function MyProfile() {
+	const isLoading = false;
+	const activeProfile = getProfile();
+	console.log(activeProfile);
+
 	const [cover, setCover] = useState<string[]>([]);
 
-	const { query } = useRouter();
-
-	const [results] = useQuery({
-		query: GET_SELLERS_QUERY,
-		variables: { uid: query.uid },
-	});
-	const { data, fetching, error } = results;
-	const res = data?.sellers.data[0];
-	const activeProfile: SellerAttributes = res?.attributes;
-	const isUser = activeProfile?.uid === user?.sub;
-
-	if (fetching || isLoading)
+	if (isLoading)
 		return (
 			<>
 				<Loading />
 			</>
 		);
-	if (error) return <p>Oh no... {error.message}</p>;
+	// if (error) return <p>Oh no... {error.message}</p>;
 
 	if (!activeProfile) {
 		return (
@@ -49,7 +44,7 @@ export default function Profile() {
 			{!cover && !activeProfile && <Loading />}
 			<Box>
 				<ColorExtractor
-					src={activeProfile.picture}
+					src={activeProfile.image}
 					getColors={(colors: string[]) => setCover([colors[0], colors[1]])}
 				/>
 				<Box h={"200px"}>
@@ -76,7 +71,7 @@ export default function Profile() {
 							style={{
 								borderRadius: "50%",
 							}}
-							src={activeProfile.picture}
+							src={activeProfile.image}
 							alt={activeProfile.name}
 						/>
 					</Box>
@@ -86,20 +81,20 @@ export default function Profile() {
 					{activeProfile.name}
 				</Text>
 				<Text fontSize={14}>{activeProfile.email}</Text>
-
+				{/* 
 				<Text color={"gray.500"} fontSize={14}>
 					{activeProfile.address}, {activeProfile.country}
 				</Text>
 				<Text color={"gray.500"} fontSize={12}>
 					{activeProfile.phone}
-				</Text>
+				</Text> */}
 			</Box>
 			<Divider mt={2} mb={2} h={2} color={"black"} />
-			{isUser && !res?.attributes ? (
+			{/* {!res?.attributes ? (
 				<CreateSeller data={res} />
 			) : (
 				<Links isUser={isUser} data={res} />
-			)}
+			)} */}
 		</>
 	);
 }

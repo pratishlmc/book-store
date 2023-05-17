@@ -6,15 +6,6 @@ const nextConfig = {
     loader: "default",
     domains: ["res.cloudinary.com", "lh3.googleusercontent.com", "upcdn.io"],
   },
-  async redirects() {
-    return [
-      {
-        source: "/canceled",
-        destination: "/",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;
